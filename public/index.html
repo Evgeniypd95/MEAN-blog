@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="MeanBlogApp">
+
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Blog Home - Start Bootstrap Template</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/blog-home.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&load=Geolink"
+ type="text/javascript"></script>
+  </head>
+<body>
+
+<!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="#">Start Bootstrap</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+  Add Restaurant
+</button>
+            </li>
+            
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- Page Content -->
+    <div ng-controller="BlogController" class="container">
+
+      <div class="row">
+
+        <!-- Blog Entries Column -->
+        <div class="col-md-12">
+
+
+          <h1 class="my-4">Restaurants in Sheffield
+            <small>Find what fits you</small>
+          </h1>
+<hr>
+
+
+<input type="file" name="">
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add restaurant</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Restaurant name:</label>
+            <input ng-model="title" type="text" class="form-control" id="recipient-name">
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="col-form-label">Description:</label>
+            <textarea ng-model="body" class="form-control" id="message-text"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="col-form-label">Cuisine:</label>
+            <textarea ng-model="test" type="text" class="form-control" placeholder="fastfood" id="message-test"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="col-form-label">Address:</label>
+            <textarea ng-model="address" type="text" class="form-control" placeholder="taco bell" id="message-address"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="col-form-label">Your Name: </label>
+            <input ng-model="name" type="text" class="form-control" id="message-date" placeholder="John">
+          </div>
+          
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button ng-click="createPost(title, body, test, name, address)" type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+          <!-- Blog Post -->
+          <div ng-repeat="post in posts">
+          <div class="card mb-4 thumbnail">
+            <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap">
+            <div class="card-body">
+              <h2 class="card-title">{{post.title}} </h2>
+              <p class="card-text">{{post.body}}</p>
+              <p class="card-text">Cuisine: {{post.test}}</p>
+              <p class="card-text">Address:<span class="ymaps-geolink" data-type="biz">
+                     {{post.address}}
+              </span></p>
+              <a ng-click="removePost(post._id)" class="btn btn-primary">Delete &rarr;</a>
+            </div>
+            <div class="card-footer text-muted">
+              Posted by {{post.name}}
+            </div>
+          </div>
+          </div>
+
+          
+
+        </div>
+
+        
+
+      </div>
+      <!-- /.row -->
+
+    </div>
+    <!-- /.container -->
+    
+
+
+
+
+
+
+    <!-- <div ng-controller="BlogController" class="container">
+
+        <h1>MEAN Blog</h1>
+
+        <input ng-model="title" class="form-control"/>
+        <textarea ng-model="body" class="form-control"></textarea>
+        <button ng-click="createPost(title, body)" class="btn btn-primary btn-block">Add Blog</button>
+
+        <div ng-repeat="post in posts">
+            <h2>
+                {{post.title}}
+                <span ng-click="removePost(post._id)" class="glyphicon glyphicon-remove pull-right"></span>
+            </h2>
+            <p>{{post.body}}</p>
+        </div>
+    </div> -->
+
+
+
+
+
+
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script>
+        angular
+            .module("MeanBlogApp", [])
+            .controller("BlogController", BlogController);
+
+        function BlogController ($scope, $http) {
+            $scope.hello = "Hello from blog controller";
+            $scope.post = {
+                title: "First Post",
+                body: "First Body",
+                test: "First Test",
+                name: ".",
+                address: "a"
+            };
+            $scope.posts = [];
+
+            $http.get("/api/post")
+                    .then(setAllPosts);
+
+            $scope.createPost = function (title, body, test, name, address) {
+                
+                var newPost = {
+                    title: title,
+                    body: body,
+                    test: test,
+                    name: name,
+                    address: address
+                };
+//                $scope.posts.push(newPost);
+                $http.post("/api/post", newPost)
+                    .then(setAllPosts);
+            }
+            $scope.removePost = function (id) {
+//                $scope.posts.splice(index, 1);
+                $http.delete("/api/post/"+id)
+                    .then(setAllPosts);
+            }
+
+            function setAllPosts(response) {
+                console.log(response);
+                $scope.posts = response.data;
+            }
+        }
+    </script>
+
+
+
+
+</body>
+</html>
